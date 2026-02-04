@@ -28,8 +28,7 @@
     <div class="w-full max-w-sm mx-auto px-4">
         <div class="mb-8 flex flex-col items-center">
             <a href="/">
-                <img src="/logo.png" alt="Špajza" class="h-24 w-auto mb-4">
-                <x-app-logo class="h-12 w-auto text-gray-900 dark:text-white" />
+                <x-app-logo :stacked="true" class="text-gray-900 dark:text-white" />
             </a>
         </div>
         {{ $slot }}
