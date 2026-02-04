@@ -30,7 +30,7 @@
     <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
         <nav class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
             {{-- Logo --}}
-            <a href="{{ route('lists.index') }}" class="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            <a href="{{ route('lists.index') }}" class="flex text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 <x-app-logo class="h-10 w-auto" />
             </a>
 

@@ -5,6 +5,7 @@ namespace App\Livewire\Lists;
 use App\Models\Item;
 use App\Models\ListItem;
 use App\Models\ShoppingList;
+use App\Models\Template;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
@@ -17,6 +18,7 @@ class Show extends Component
     public string $listName = '';
     public bool $editingName = false;
     public bool $showItemPicker = false;
+    public bool $showTemplatePicker = false;
 
     // Item picker state
     public string $search = '';
@@ -152,6 +154,39 @@ class Show extends Component
         }
 
         return $query->orderBy('name')->get();
+    }
+
+    public function addFromTemplate(int $templateId): void
+    {
+        $template = Template::where('user_id', Auth::id())->findOrFail($templateId);
+
+        $maxSort = $this->list->listItems()->max('sort_order') ?? -1;
+
+        foreach ($template->items as $item) {
+            if ($this->list->listItems()->where('item_id', $item->id)->exists()) {
+                continue;
+            }
+
+            $maxSort++;
+            $this->list->listItems()->create([
+                'item_id' => $item->id,
+                'quantity' => $item->last_quantity ?? 1,
+                'unit' => $item->last_unit ?? $item->default_unit,
+                'sort_order' => $maxSort,
+            ]);
+        }
+
+        $this->list->touch();
+        $this->showTemplatePicker = false;
+    }
+
+    #[Computed]
+    public function templates()
+    {
+        return Template::where('user_id', Auth::id())
+            ->withCount('items')
+            ->orderBy('name')
+            ->get();
     }
 
     #[Computed]
