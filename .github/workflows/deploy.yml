@@ -41,7 +41,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p 2222 -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy via rsync
         run: |
@@ -55,12 +55,12 @@ jobs:
             --exclude 'storage/framework/sessions/' \
             --exclude 'storage/framework/views/' \
             --exclude 'tests/' \
-            -e "ssh -i ~/.ssh/deploy_key" \
+            -e "ssh -i ~/.ssh/deploy_key -p 2222" \
             ./ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_DEPLOY_DIR }}
 
       - name: Post-deploy commands
         run: |
-          ssh -i ~/.ssh/deploy_key ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -i ~/.ssh/deploy_key -p 2222 ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd ${{ secrets.SSH_DEPLOY_DIR }}
             php artisan migrate --force
             php artisan config:cache
