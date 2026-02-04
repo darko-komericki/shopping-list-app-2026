@@ -23,6 +23,7 @@
         })();
     </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @fluxAppearance
 </head>
 <body class="min-h-screen font-sans antialiased flex items-center justify-center bg-gray-50 dark:bg-gray-900">
     <div class="w-full max-w-sm mx-auto px-4">
@@ -33,5 +34,6 @@
         </div>
         {{ $slot }}
     </div>
+    @fluxScripts
 </body>
 </html>
