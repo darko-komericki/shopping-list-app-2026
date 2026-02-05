@@ -266,7 +266,7 @@
         @endif
 
         {{-- FAB buttons --}}
-        <div class="fixed bottom-22 sm:bottom-6 right-6 flex gap-2 z-10">
+        <div class="fixed bottom-28 sm:bottom-6 right-6 flex gap-2 z-10">
             <button
                 wire:click="$set('showTemplatePicker', true)"
                 class="w-14 h-14 bg-gray-600 text-white rounded-full shadow-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
@@ -515,7 +515,7 @@
         x-transition:leave-start="translate-y-0 opacity-100"
         x-transition:leave-end="translate-y-full opacity-0"
         x-cloak
-        class="fixed bottom-22 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 z-20"
+        class="fixed bottom-28 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 z-20"
     >
         <div class="flex items-center justify-between gap-3 px-4 py-3 bg-gray-900 dark:bg-gray-700 text-white rounded-lg shadow-lg">
             <span class="text-sm truncate" x-text="$store.undo.itemName + ' obrisan/a'"></span>
