@@ -50,9 +50,37 @@ npm run dev          # Vite dev server
 php artisan test
 ```
 
-## Production
+## Deployment
+
+Deployment is automated via GitHub Actions on version tags.
+
+### Deploy a new version
 
 ```bash
-npm run build
-php artisan migrate --force
+git tag v1.x.x
+git push origin v1.x.x
+```
+
+The workflow builds assets, syncs files via rsync, and runs migrations.
+
+### GitHub Secrets Required
+
+| Secret | Description |
+|--------|-------------|
+| `SSH_PRIVATE_KEY` | Private SSH key for server access |
+| `SSH_HOST` | Server IP address |
+| `SSH_USERNAME` | SSH username (e.g., `deployer`) |
+| `SSH_DEPLOY_DIR` | Deploy path (e.g., `/var/www/shopping.identik.hr`) |
+
+### Server Setup
+
+```bash
+# Create storage directories (excluded from rsync)
+mkdir -p storage/logs storage/framework/{cache,sessions,views}
+mkdir -p bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+
+# Create .env with production values
+# Generate app key after first deploy
+php artisan key:generate
 ```
