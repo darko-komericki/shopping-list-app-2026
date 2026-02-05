@@ -25,7 +25,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @fluxAppearance
 </head>
-<body class="min-h-screen font-sans antialiased flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+<body class="min-h-screen font-sans antialiased flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12">
     <div class="w-full max-w-sm mx-auto px-4">
         <div class="mb-8 flex flex-col items-center">
             <a href="/">
