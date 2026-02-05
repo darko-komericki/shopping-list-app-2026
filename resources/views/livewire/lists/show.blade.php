@@ -339,7 +339,7 @@
                 </div>
 
                 {{-- Items list --}}
-                <div class="flex-1 overflow-y-auto p-4">
+                <div class="flex-1 overflow-y-auto p-4 pb-20 sm:pb-4">
                     <template x-if="showCreateForm">
                         <div class="space-y-4">
                             <div class="flex items-center gap-2 mb-2">
@@ -476,7 +476,7 @@
                     </button>
                 </div>
 
-                <div class="flex-1 overflow-y-auto p-4">
+                <div class="flex-1 overflow-y-auto p-4 pb-20 sm:pb-4">
                     @if($this->templates->isEmpty())
                         <div class="text-center py-8 text-gray-500 dark:text-gray-400">
                             <p>Nemate predložaka</p>
