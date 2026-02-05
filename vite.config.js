@@ -4,6 +4,8 @@ import {
 import laravel from 'laravel-vite-plugin';
 import tailwindcss from "@tailwindcss/vite";
 
+const isDdev = process.env.IS_DDEV_PROJECT === 'true';
+
 export default defineConfig({
     plugins: [
         laravel({
@@ -13,6 +15,10 @@ export default defineConfig({
         tailwindcss(),
     ],
     server: {
+        host: '0.0.0.0',
+        ...(isDdev ? {
+            origin: 'https://shopping-list-app-2026.ddev.site:5173',
+        } : {}),
         cors: true,
         watch: {
             ignored: ['**/storage/framework/views/**'],
