@@ -45,14 +45,7 @@ class Index extends Component
         $this->redirect(route('lists.show', $list), navigate: true);
     }
 
-    public function deleteList(string $listId): void
-    {
-        ShoppingList::where('user_id', Auth::id())
-            ->where('id', $listId)
-            ->delete();
-    }
-
-    public function render()
+public function render()
     {
         $lists = Auth::user()->shoppingLists()
             ->withCount('listItems')
