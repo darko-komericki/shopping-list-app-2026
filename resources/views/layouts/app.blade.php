@@ -50,23 +50,25 @@
                 </a>
             </div>
 
-            <div class="flex items-center gap-2" x-data="{ avatarOpen: false }">
+            <div class="flex items-center gap-2" x-data="{ avatarOpen: false, hasGravatar: false }" x-init="
+                let img = new Image();
+                img.onload = () => { hasGravatar = true };
+                img.src = '{{ auth()->user()->gravatarUrl(72) }}';
+            ">
                 {{-- Avatar dropdown --}}
                 <div class="relative" x-data="themeManager()" @click.outside="avatarOpen = false">
                     <button
                         @click="avatarOpen = !avatarOpen"
                         class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-semibold hover:bg-blue-700 transition-colors uppercase overflow-hidden ring-2 ring-gray-300 dark:ring-gray-600"
                         aria-label="User menu"
-                        x-data="{ hasGravatar: true }"
                     >
                         <img
                             x-show="hasGravatar"
-                            x-on:error="hasGravatar = false"
                             src="{{ auth()->user()->gravatarUrl(72) }}"
                             alt=""
                             class="w-full h-full object-cover"
                         >
-                        <span x-show="!hasGravatar" x-cloak>{{ auth()->user()->initials() }}</span>
+                        <span x-show="!hasGravatar">{{ auth()->user()->initials() }}</span>
                     </button>
                     <div x-show="avatarOpen" x-cloak x-transition class="absolute right-0 mt-2 w-56 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg py-1 z-50">
                         <div class="px-4 py-2.5 border-b border-gray-200 dark:border-gray-700">
@@ -143,29 +145,33 @@
     @livewireScripts
     <script src="/js/webmcp.js" defer></script>
     <script>
+        function applyTheme() {
+            const theme = localStorage.getItem('theme') || 'system';
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (theme === 'system' && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
         function themeManager() {
             return {
                 current: localStorage.getItem('theme') || 'system',
                 setTheme(theme) {
                     this.current = theme;
                     localStorage.setItem('theme', theme);
-                    this.apply(theme);
-                },
-                apply(theme) {
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    if (theme === 'dark' || (theme === 'system' && prefersDark)) {
-                        document.documentElement.classList.add('dark');
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                    }
+                    applyTheme();
                 },
                 init() {
                     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-                        if (this.current === 'system') this.apply('system');
+                        if (this.current === 'system') applyTheme();
                     });
                 }
             }
         }
+
+        document.addEventListener('livewire:navigated', applyTheme);
     </script>
 </body>
 </html>
