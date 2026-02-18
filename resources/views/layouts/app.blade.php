@@ -141,6 +141,7 @@
     </nav>
 
     @livewireScripts
+    <script src="/js/webmcp.js" defer></script>
     <script>
         function themeManager() {
             return {

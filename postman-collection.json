@@ -1,0 +1,169 @@
+{
+	"info": {
+		"name": "Špajza WebMCP API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://shopping-list-app-2026.ddev.site"
+		},
+		{
+			"key": "listId",
+			"value": "1"
+		},
+		{
+			"key": "listItemId",
+			"value": "1"
+		},
+		{
+			"key": "itemId",
+			"value": "1"
+		},
+		{
+			"key": "templateId",
+			"value": "1"
+		}
+	],
+	"item": [
+		{
+			"name": "Lists",
+			"item": [
+				{
+					"name": "Get all lists",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/mcp/lists"
+					}
+				},
+				{
+					"name": "Get single list",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/mcp/lists/{{listId}}"
+					}
+				},
+				{
+					"name": "Create list",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/mcp/lists",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Test lista\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Create list from template",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/mcp/lists",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"template_id\": {{templateId}}\n}"
+						}
+					}
+				},
+				{
+					"name": "Delete list",
+					"request": {
+						"method": "DELETE",
+						"url": "{{baseUrl}}/mcp/lists/{{listId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "List Items",
+			"item": [
+				{
+					"name": "Add item to list",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/mcp/lists/{{listId}}/items",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"item_id\": {{itemId}}\n}"
+						}
+					}
+				},
+				{
+					"name": "Create and add item",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/mcp/lists/{{listId}}/items/create",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Novi artikl\",\n\t\"category\": \"ostalo\",\n\t\"unit\": \"kom\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Toggle list item",
+					"request": {
+						"method": "PATCH",
+						"url": "{{baseUrl}}/mcp/list-items/{{listItemId}}/toggle"
+					}
+				},
+				{
+					"name": "Remove item from list",
+					"request": {
+						"method": "DELETE",
+						"url": "{{baseUrl}}/mcp/list-items/{{listItemId}}"
+					}
+				},
+				{
+					"name": "Clear checked items",
+					"request": {
+						"method": "DELETE",
+						"url": "{{baseUrl}}/mcp/lists/{{listId}}/checked"
+					}
+				}
+			]
+		},
+		{
+			"name": "Catalog",
+			"item": [
+				{
+					"name": "Get all items",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/mcp/items"
+					}
+				},
+				{
+					"name": "Get all templates",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/mcp/templates"
+					}
+				}
+			]
+		}
+	]
+}

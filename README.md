@@ -50,6 +50,37 @@ npm run dev          # Vite dev server
 php artisan test
 ```
 
+## WebMCP (AI Agent API)
+
+Špajza exposes structured tools via the [WebMCP](https://developer.chrome.com/docs/web-platform/web-mcp) standard (`navigator.modelContext`), allowing AI agents to interact with the app without screenshot-clicking.
+
+### Available tools
+
+| Tool | Description |
+|------|-------------|
+| `getShoppingLists` | Get all shopping lists |
+| `getShoppingList` | Get a list with all items |
+| `getItems` | Get the item catalog |
+| `getTemplates` | Get templates with items |
+| `createShoppingList` | Create a list (optionally from template) |
+| `addItemToList` | Add a catalog item to a list |
+| `createAndAddItem` | Create a new item and add it to a list |
+| `toggleListItem` | Toggle checked state |
+| `removeItemFromList` | Remove an item from a list |
+| `clearCheckedItems` | Remove all checked items |
+| `deleteShoppingList` | Delete a list |
+
+### JSON API
+
+The tools call `/mcp/*` routes which are also usable directly:
+
+```bash
+# Fetch lists (requires session cookie)
+fetch('/mcp/lists').then(r => r.json()).then(console.log)
+```
+
+Routes use `web` + `auth` middleware (session-based auth) with CSRF exempted.
+
 ## Deployment
 
 Deployment is automated via GitHub Actions on version tags.
