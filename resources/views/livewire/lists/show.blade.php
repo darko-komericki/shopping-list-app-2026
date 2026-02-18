@@ -290,10 +290,10 @@
 
     {{-- Item picker modal --}}
     @if($showItemPicker)
-        <div class="fixed inset-0 z-50 flex items-end sm:items-center justify-center" x-data="{ showCreateForm: false, newName: @entangle('search'), newCategory: 'ostalo', newUnit: 'kom' }" @keydown.escape.window="$wire.set('showItemPicker', false)">
+        <div class="fixed inset-0 flex items-stretch sm:items-center justify-center" style="z-index: 60" x-data="{ showCreateForm: false, newName: @entangle('search'), newCategory: 'ostalo', newUnit: 'kom' }" @keydown.escape.window="$wire.set('showItemPicker', false)">
             <div class="absolute inset-0 bg-black/50" wire:click="$set('showItemPicker', false)"></div>
 
-            <div class="relative bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl w-full max-w-lg max-h-[80vh] flex flex-col">
+            <div class="relative bg-white dark:bg-gray-800 sm:rounded-2xl w-full sm:max-w-lg flex flex-col z-10 sm:my-8" style="max-height: 100%; max-height: 100dvh" x-init="if (window.matchMedia('(min-width: 640px)').matches) $el.style.maxHeight = '80vh'">
                 {{-- Header --}}
                 <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Dodaj artikle</h2>
@@ -339,7 +339,7 @@
                 </div>
 
                 {{-- Items list --}}
-                <div class="flex-1 overflow-y-auto p-4 pb-20 sm:pb-4">
+                <div class="flex-1 overflow-y-auto p-4 sm:pb-4" style="padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px))">
                     <template x-if="showCreateForm">
                         <div class="space-y-4">
                             <div class="flex items-center gap-2 mb-2">
@@ -459,10 +459,10 @@
 
     {{-- Template picker modal --}}
     @if($showTemplatePicker)
-        <div class="fixed inset-0 z-50 flex items-end sm:items-center justify-center" @keydown.escape.window="$wire.set('showTemplatePicker', false)">
+        <div class="fixed inset-0 flex items-stretch sm:items-center justify-center" style="z-index: 60" @keydown.escape.window="$wire.set('showTemplatePicker', false)">
             <div class="absolute inset-0 bg-black/50" wire:click="$set('showTemplatePicker', false)"></div>
 
-            <div class="relative bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl w-full max-w-lg max-h-[80vh] flex flex-col">
+            <div class="relative bg-white dark:bg-gray-800 sm:rounded-2xl w-full sm:max-w-lg flex flex-col z-10 sm:my-8" style="max-height: 100%; max-height: 100dvh" x-init="if (window.matchMedia('(min-width: 640px)').matches) $el.style.maxHeight = '80vh'">
                 <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Dodaj iz predloška</h2>
                     <button
@@ -476,7 +476,7 @@
                     </button>
                 </div>
 
-                <div class="flex-1 overflow-y-auto p-4 pb-20 sm:pb-4">
+                <div class="flex-1 overflow-y-auto p-4 sm:pb-4" style="padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px))">
                     @if($this->templates->isEmpty())
                         <div class="text-center py-8 text-gray-500 dark:text-gray-400">
                             <p>Nemate predložaka</p>
