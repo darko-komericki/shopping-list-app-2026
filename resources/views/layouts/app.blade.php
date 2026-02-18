@@ -143,29 +143,33 @@
     @livewireScripts
     <script src="/js/webmcp.js" defer></script>
     <script>
+        function applyTheme() {
+            const theme = localStorage.getItem('theme') || 'system';
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (theme === 'system' && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
         function themeManager() {
             return {
                 current: localStorage.getItem('theme') || 'system',
                 setTheme(theme) {
                     this.current = theme;
                     localStorage.setItem('theme', theme);
-                    this.apply(theme);
-                },
-                apply(theme) {
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    if (theme === 'dark' || (theme === 'system' && prefersDark)) {
-                        document.documentElement.classList.add('dark');
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                    }
+                    applyTheme();
                 },
                 init() {
                     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-                        if (this.current === 'system') this.apply('system');
+                        if (this.current === 'system') applyTheme();
                     });
                 }
             }
         }
+
+        document.addEventListener('livewire:navigated', applyTheme);
     </script>
 </body>
 </html>
