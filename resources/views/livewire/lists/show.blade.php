@@ -537,13 +537,17 @@
         _listItemId: null,
         _timer: null,
         _wrapper: null,
-        _wire: null,
+        _wireId: null,
+
+        _getWire() {
+            return this._wireId ? Livewire.find(this._wireId) : null;
+        },
 
         schedule(listItemId, itemName, wrapper, wire) {
             // If there's already a pending delete, execute it immediately
             if (this._timer) {
                 clearTimeout(this._timer);
-                this._wire?.removeItem(this._listItemId);
+                this._getWire()?.removeItem(this._listItemId);
                 this._cleanup();
             }
 
@@ -551,10 +555,10 @@
             this.itemName = itemName;
             this._listItemId = listItemId;
             this._wrapper = wrapper;
-            this._wire = wire;
+            this._wireId = wire.$id;
 
             this._timer = setTimeout(() => {
-                this._wire?.removeItem(this._listItemId);
+                this._getWire()?.removeItem(this._listItemId);
                 this.active = false;
                 this._cleanup();
             }, 4000);
@@ -589,7 +593,7 @@
             this._listItemId = null;
             this._timer = null;
             this._wrapper = null;
-            this._wire = null;
+            this._wireId = null;
         }
     });
 
