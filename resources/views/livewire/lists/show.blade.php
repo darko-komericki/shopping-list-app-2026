@@ -74,6 +74,11 @@
         @if($this->uncheckedItems->isNotEmpty())
             <div class="space-y-2 mb-6">
                 @foreach($this->uncheckedItems as $listItem)
+                    @if($loop->first || $listItem->item->category !== $this->uncheckedItems[$loop->index - 1]->item->category)
+                        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide {{ !$loop->first ? 'mt-4' : '' }}">
+                            {{ $listItem->item->category }}
+                        </h3>
+                    @endif
                     <div
                         class="relative overflow-hidden rounded-lg sm:overflow-visible"
                         x-data="swipeItem()"

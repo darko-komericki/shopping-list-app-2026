@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Lists;
 
+use App\Models\Category;
 use App\Models\Item;
 use App\Models\ListItem;
 use App\Models\ShoppingList;
@@ -119,7 +120,14 @@ class Show extends Component
         return $this->list->listItems()
             ->with('item')
             ->where('checked', false)
-            ->orderBy('sort_order')
+            ->join('items', 'list_items.item_id', '=', 'items.id')
+            ->leftJoin('categories', function ($join) {
+                $join->on('items.category', '=', 'categories.name')
+                    ->where('categories.user_id', Auth::id());
+            })
+            ->orderBy('categories.sort_order')
+            ->orderBy('items.name')
+            ->select('list_items.*')
             ->get();
     }
 
@@ -129,7 +137,14 @@ class Show extends Component
         return $this->list->listItems()
             ->with('item')
             ->where('checked', true)
-            ->orderBy('sort_order')
+            ->join('items', 'list_items.item_id', '=', 'items.id')
+            ->leftJoin('categories', function ($join) {
+                $join->on('items.category', '=', 'categories.name')
+                    ->where('categories.user_id', Auth::id());
+            })
+            ->orderBy('categories.sort_order')
+            ->orderBy('items.name')
+            ->select('list_items.*')
             ->get();
     }
 
