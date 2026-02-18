@@ -12,7 +12,7 @@
                     autofocus
                 />
             @else
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white truncate">
+                <h1 wire:click="$set('editingName', true)" class="text-2xl font-bold text-gray-900 dark:text-white truncate cursor-pointer">
                     {{ $listName }}
                 </h1>
             @endif
