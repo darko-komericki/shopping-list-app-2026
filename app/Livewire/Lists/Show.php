@@ -49,12 +49,23 @@ class Show extends Component
         $this->list->touch();
     }
 
-    public function updateQuantity(int $listItemId, int $delta): void
+    public function updateQuantity(int $listItemId, float $delta): void
     {
         $item = $this->list->listItems()->findOrFail($listItemId);
-        $newQty = max(1, $item->quantity + $delta);
-        $item->update(['quantity' => $newQty]);
+        $step = self::stepForUnit($item->unit);
+        $newQty = max($step, $item->quantity + $delta);
+        $item->update(['quantity' => round($newQty, 2)]);
         $this->list->touch();
+    }
+
+    public static function stepForUnit(string $unit): float
+    {
+        return match ($unit) {
+            'g' => 50,
+            'ml' => 100,
+            'kg', 'l' => 0.5,
+            default => 1,
+        };
     }
 
     public function removeItem(int $listItemId): void
@@ -86,10 +97,11 @@ class Show extends Component
 
         $maxSort = $this->list->listItems()->max('sort_order') ?? -1;
 
+        $unit = $item->last_unit ?? $item->default_unit;
         $this->list->listItems()->create([
             'item_id' => $item->id,
-            'quantity' => $item->last_quantity ?? 1,
-            'unit' => $item->last_unit ?? $item->default_unit,
+            'quantity' => $item->last_quantity ?? self::stepForUnit($unit),
+            'unit' => $unit,
             'sort_order' => $maxSort + 1,
         ]);
 
@@ -183,10 +195,11 @@ class Show extends Component
             }
 
             $maxSort++;
+            $unit = $item->last_unit ?? $item->default_unit;
             $this->list->listItems()->create([
                 'item_id' => $item->id,
-                'quantity' => $item->last_quantity ?? 1,
-                'unit' => $item->last_unit ?? $item->default_unit,
+                'quantity' => $item->last_quantity ?? self::stepForUnit($unit),
+                'unit' => $unit,
                 'sort_order' => $maxSort,
             ]);
         }

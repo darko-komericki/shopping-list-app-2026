@@ -101,7 +101,7 @@
                             class="relative p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
                             :style="cardStyle()"
                             @touchstart="onTouchStart($event)"
-                            @touchmove="onTouchMove($event)"
+                            x-ref="card"
                             @touchend="onTouchEnd($event, {{ $listItem->id }}, '{{ addslashes($listItem->item->name) }}')"
                         >
                             <div class="flex items-center gap-3">
@@ -118,13 +118,14 @@
                                 </div>
                             </div>
 
+                            @php($step = \App\Livewire\Lists\Show::stepForUnit($listItem->unit))
                             <div class="flex items-center justify-between mt-2 sm:pl-9">
                                 {{-- Quantity stepper --}}
                                 <div class="flex items-center gap-1">
                                     <button
                                         type="button"
-                                        wire:click="updateQuantity({{ $listItem->id }}, -1)"
-                                        @if($listItem->quantity <= 1) disabled @endif
+                                        wire:click="updateQuantity({{ $listItem->id }}, {{ -$step }})"
+                                        @if($listItem->quantity <= $step) disabled @endif
                                         class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                     >
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +137,7 @@
                                     </span>
                                     <button
                                         type="button"
-                                        wire:click="updateQuantity({{ $listItem->id }}, 1)"
+                                        wire:click="updateQuantity({{ $listItem->id }}, {{ $step }})"
                                         class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                                     >
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,7 +202,7 @@
                                 class="relative p-3 bg-white dark:bg-gray-800 rounded-lg border border-green-300 dark:border-green-800 sm:opacity-60 sm:border-gray-200 sm:dark:border-gray-700"
                                 :style="cardStyle()"
                                 @touchstart="onTouchStart($event)"
-                                @touchmove="onTouchMove($event)"
+                                x-ref="card"
                                 @touchend="onTouchEnd($event, {{ $listItem->id }}, '{{ addslashes($listItem->item->name) }}')"
                             >
                                 <div class="flex items-center gap-3">
@@ -227,12 +228,13 @@
                                     </div>
                                 </div>
 
+                                @php($step = \App\Livewire\Lists\Show::stepForUnit($listItem->unit))
                                 <div class="flex items-center justify-between mt-2 sm:pl-9">
                                     <div class="flex items-center gap-1">
                                         <button
                                             type="button"
-                                            wire:click="updateQuantity({{ $listItem->id }}, -1)"
-                                            @if($listItem->quantity <= 1) disabled @endif
+                                            wire:click="updateQuantity({{ $listItem->id }}, {{ -$step }})"
+                                            @if($listItem->quantity <= $step) disabled @endif
                                             class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -244,7 +246,7 @@
                                         </span>
                                         <button
                                             type="button"
-                                            wire:click="updateQuantity({{ $listItem->id }}, 1)"
+                                            wire:click="updateQuantity({{ $listItem->id }}, {{ $step }})"
                                             class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -610,6 +612,10 @@
         animating: false,
         direction: null,
 
+        init() {
+            this.$refs.card.addEventListener('touchmove', (e) => this.onTouchMove(e), { passive: false });
+        },
+
         cardStyle() {
             return {
                 transform: `translateX(${this.offset}px)`,
@@ -661,6 +667,7 @@
             }
 
             if (this.direction !== 'h') return;
+            e.preventDefault();
             this.offset = this.rubberBand(diffX, 80);
         },
 
